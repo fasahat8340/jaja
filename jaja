@@ -1,99 +1,186 @@
+
 package javaapplication39;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
-public class ScientificCalculator {
+
+abstract class LibraryItem {
+    private String title;
+    private int itemId;
+    private boolean isCheckedOut;
+
+    public LibraryItem(String title, int itemId) {
+        this.title = title;
+        this.itemId = itemId;
+        this.isCheckedOut = false;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public int getItemId() {
+        return itemId;
+    }
+
+    public boolean isCheckedOut() {
+        return isCheckedOut;
+    }
+
+    public void checkOut() {
+        isCheckedOut = true;
+    }
+
+    public void checkIn() {
+        isCheckedOut = false;
+    }
+
+
+    public abstract void displayDetails();
+}
+
+
+class Book extends LibraryItem {
+    private String author;
+    private int pageCount;
+
+    public Book(String title, int itemId, String author, int pageCount) {
+        super(title, itemId);
+        this.author = author;
+        this.pageCount = pageCount;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public int getPageCount() {
+        return pageCount;
+    }
+
+    @Override
+    public void displayDetails() {
+        System.out.println("Book Title: " + getTitle());
+        System.out.println("Author: " + getAuthor());
+        System.out.println("Page Count: " + getPageCount());
+        System.out.println("Item ID: " + getItemId());
+        System.out.println("Checked Out: " + isCheckedOut());
+    }
+}
+
+class DVD extends LibraryItem {
+    private String director;
+    private double duration;
+
+    public DVD(String title, int itemId, String director, double duration) {
+        super(title, itemId);
+        this.director = director;
+        this.duration = duration;
+    }
+
+    public String getDirector() {
+        return director;
+    }
+
+    public double getDuration() {
+        return duration;
+    }
+
+    @Override
+    public void displayDetails() {
+        System.out.println("DVD Title: " + getTitle());
+        System.out.println("Director: " + getDirector());
+        System.out.println("Duration: " + getDuration() + " minutes");
+        System.out.println("Item ID: " + getItemId());
+        System.out.println("Checked Out: " + isCheckedOut());
+    }
+}
+
+class Library {
+    private ArrayList<LibraryItem> items;
+
+    public Library() {
+        this.items = new ArrayList<>();
+    }
+
+    public void addItem(LibraryItem item) {
+        items.add(item);
+    }
+
+    public void displayAllItems() {
+        for (LibraryItem item : items) {
+            item.displayDetails();
+            System.out.println();
+        }
+    }
+
+    public void checkOutItem(int itemId) {
+        for (LibraryItem item : items) {
+            if (item.getItemId() == itemId && !item.isCheckedOut()) {
+                item.checkOut();
+                System.out.println("Item with ID " + itemId + " checked out successfully.");
+                return;
+            }
+        }
+        System.out.println("Item with ID " + itemId + " is either not available or already checked out.");
+    }
+
+    public void checkInItem(int itemId) {
+        for (LibraryItem item : items) {
+            if (item.getItemId() == itemId && item.isCheckedOut()) {
+                item.checkIn();
+                System.out.println("Item with ID " + itemId + " checked in successfully.");
+                return;
+            }
+        }
+        System.out.println("Item with ID " + itemId + " is either not checked out or does not exist.");
+    }
+}
+
+public class Main {
     public static void main(String[] args) {
+        Library library = new Library();
         Scanner scanner = new Scanner(System.in);
-        
-        System.out.println("Enter first number: ");
-        double num1 = scanner.nextDouble();
-        
-        System.out.println("Enter second number (if needed, otherwise enter 0): ");
-        double num2 = scanner.nextDouble();
-        
-        System.out.println("Choose an operation:");
-        System.out.println(" + : Addition");
-        System.out.println(" - : Subtraction");
-        System.out.println(" * : Multiplication");
-        System.out.println(" / : Division");
-        System.out.println(" ^ : Exponentiation");
-        System.out.println(" sin : Sine");
-        System.out.println(" cos : Cosine");
-        System.out.println(" tan : Tangent");
-        System.out.println(" log : Logarithm (base 10)");
-        System.out.println(" ln : Natural Logarithm (base e)");
-        System.out.println(" sqrt : Square Root");
-        
-        String operator = scanner.next();
-        
-        double result = 0;
-        boolean validOperation = true;
-        
-        switch (operator) {
-            case "+":
-                result = num1 + num2;
-                break;
-            case "-":
-                result = num1 - num2;
-                break;
-            case "*":
-                result = num1 * num2;
-                break;
-            case "/":
-                if (num2 != 0) {
-                    result = num1 / num2;
-                } else {
-                    System.out.println("Error! Division by zero.");
-                    validOperation = false;
-                }
-                break;
-            case "^":
-                result = Math.pow(num1, num2);
-                break;
-            case "sin":
-                result = Math.sin(Math.toRadians(num1));
-                break;
-            case "cos":
-                result = Math.cos(Math.toRadians(num1));
-                break;
-            case "tan":
-                result = Math.tan(Math.toRadians(num1));
-                break;
-            case "log":
-                if (num1 > 0) {
-                    result = Math.log10(num1);
-                } else {
-                    System.out.println("Error! Logarithm of non-positive number.");
-                    validOperation = false;
-                }
-                break;
-            case "ln":
-                if (num1 > 0) {
-                    result = Math.log(num1);
-                } else {
-                    System.out.println("Error! Natural logarithm of non-positive number.");
-                    validOperation = false;
-                }
-                break;
-            case "sqrt":
-                if (num1 >= 0) {
-                    result = Math.sqrt(num1);
-                } else {
-                    System.out.println("Error! Square root of negative number.");
-                    validOperation = false;
-                }
-                break;
-            default:
-                System.out.println("Invalid operator!");
-                validOperation = false;
-                break;
+
+        Book book1 = new Book("The Witcher", 101, "Andrzej Sapkowski", 500);
+        Book book2 = new Book("The Godfather", 102, "Mario Puzo", 400);
+        DVD dvd1 = new DVD("Fight Club", 201, "Chuck Palahniuk", 120.5);
+
+        library.addItem(book1);
+        library.addItem(book2);
+        library.addItem(dvd1);
+
+        System.out.println("Welcome to the Library Management System!");
+
+        while (true) {
+            System.out.println("\nChoose an option:");
+            System.out.println("1. Display all items");
+            System.out.println("2. Check out an item");
+            System.out.println("3. Check in an item");
+            System.out.println("4. Exit");
+            int option = scanner.nextInt();
+            switch (option) {
+                case 1:
+                    library.displayAllItems();
+                    break;
+                case 2:
+                    System.out.println("Enter the ID of the item you want to check out:");
+                    int checkOutId = scanner.nextInt();
+                    library.checkOutItem(checkOutId);
+                    break;
+                case 3:
+                    System.out.println("Enter the ID of the item you want to check in:");
+                    int checkInId = scanner.nextInt();
+                    library.checkInItem(checkInId);
+                    break;
+                case 4:
+                    System.out.println("Exiting...");
+                    scanner.close();
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid option. Please choose again.");
+            }
         }
-        
-        if (validOperation) {
-            System.out.println("The result is: " + result);
-        }
-        
-        scanner.close();
     }
 }
