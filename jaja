@@ -1,0 +1,99 @@
+package javaapplication39;
+
+import java.util.Scanner;
+
+public class ScientificCalculator {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.println("Enter first number: ");
+        double num1 = scanner.nextDouble();
+        
+        System.out.println("Enter second number (if needed, otherwise enter 0): ");
+        double num2 = scanner.nextDouble();
+        
+        System.out.println("Choose an operation:");
+        System.out.println(" + : Addition");
+        System.out.println(" - : Subtraction");
+        System.out.println(" * : Multiplication");
+        System.out.println(" / : Division");
+        System.out.println(" ^ : Exponentiation");
+        System.out.println(" sin : Sine");
+        System.out.println(" cos : Cosine");
+        System.out.println(" tan : Tangent");
+        System.out.println(" log : Logarithm (base 10)");
+        System.out.println(" ln : Natural Logarithm (base e)");
+        System.out.println(" sqrt : Square Root");
+        
+        String operator = scanner.next();
+        
+        double result = 0;
+        boolean validOperation = true;
+        
+        switch (operator) {
+            case "+":
+                result = num1 + num2;
+                break;
+            case "-":
+                result = num1 - num2;
+                break;
+            case "*":
+                result = num1 * num2;
+                break;
+            case "/":
+                if (num2 != 0) {
+                    result = num1 / num2;
+                } else {
+                    System.out.println("Error! Division by zero.");
+                    validOperation = false;
+                }
+                break;
+            case "^":
+                result = Math.pow(num1, num2);
+                break;
+            case "sin":
+                result = Math.sin(Math.toRadians(num1));
+                break;
+            case "cos":
+                result = Math.cos(Math.toRadians(num1));
+                break;
+            case "tan":
+                result = Math.tan(Math.toRadians(num1));
+                break;
+            case "log":
+                if (num1 > 0) {
+                    result = Math.log10(num1);
+                } else {
+                    System.out.println("Error! Logarithm of non-positive number.");
+                    validOperation = false;
+                }
+                break;
+            case "ln":
+                if (num1 > 0) {
+                    result = Math.log(num1);
+                } else {
+                    System.out.println("Error! Natural logarithm of non-positive number.");
+                    validOperation = false;
+                }
+                break;
+            case "sqrt":
+                if (num1 >= 0) {
+                    result = Math.sqrt(num1);
+                } else {
+                    System.out.println("Error! Square root of negative number.");
+                    validOperation = false;
+                }
+                break;
+            default:
+                System.out.println("Invalid operator!");
+                validOperation = false;
+                break;
+        }
+        
+        if (validOperation) {
+            System.out.println("The result is: " + result);
+        }
+        
+        scanner.close();
+    }
+}
